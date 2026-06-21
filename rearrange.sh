@@ -250,6 +250,39 @@ repair_osb_svgs() {
     log_success "Repaired ${n} SVGs"
 }
 
+# Replace the colored (blue-circle) navigation action icons with flat,
+# KDE-recolorable versions built from the symbolic artwork, so Plasma/Dolphin's
+# toolbar shows the same flat arrows XFCE/Thunar already does. The apps pull
+# different files from the same theme — GTK uses actions/symbolic/<n>-symbolic,
+# KDE the colored actions/<size>/<n>. We convert the symbolic art's fill to
+# currentColor + the .ColorScheme-Text stylesheet so KDE recolours it to the
+# toolbar text colour (light on dark, dark on light); GTK keeps using the
+# untouched symbolic icons. Scope: navigation only (back/forward/up/home/reload).
+NAV_FLAT_ICONS=(go-previous go-next go-up go-home view-refresh go-previous-rtl go-next-rtl)
+flatten_nav_actions() {
+    log_section "Flattening navigation action icons (KDE-recolorable)"
+    local actdir="${OUT}/actions" name src tmp size n=0
+    for name in "${NAV_FLAT_ICONS[@]}"; do
+        src="${actdir}/symbolic/${name}-symbolic.svg"
+        [[ -f "${src}" ]] || continue
+        tmp="$(mktemp)"
+        sed -E \
+            -e '0,/<path/{s@(<path)@<style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#4d4d4d; }</style>\n  \1@}' \
+            -e 's@fill="#[0-9a-fA-F]{3,6}"@fill="currentColor"@g' \
+            -e 's@fill:#[0-9a-fA-F]{3,6}@fill:currentColor@g' \
+            -e 's@<path @<path class="ColorScheme-Text" @g' \
+            "${src}" > "${tmp}"
+        for size in 16 22 24 32 scalable; do
+            [[ -d "${actdir}/${size}" ]] || continue
+            rm -f "${actdir}/${size}/${name}.svg" "${actdir}/${size}/${name}.png"
+            cp "${tmp}" "${actdir}/${size}/${name}.svg"
+            n=$((n+1))
+        done
+        rm -f "${tmp}"
+    done
+    log_success "Flattened ${n} nav icon files"
+}
+
 # Propagate same-directory alias symlinks from places/scalable down to every
 # fixed pixel size. Surfn ships alternate folder names (e.g. folder-downloads ->
 # folder-download, folder-text -> folder-documents) only in scalable/, so when a
@@ -376,6 +409,7 @@ main() {
     fix_cross_aliases
     overlay_breeze_contexts
     repair_osb_svgs
+    flatten_nav_actions
     propagate_place_aliases
     preferred_place_aliases
     make_hidpi

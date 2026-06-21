@@ -1,6 +1,37 @@
-<svg width="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" height="16">
- <g transform="matrix(0 -1 -1 0 16 16)">
-  <path style="fill:#268bd2;fill-rule:evenodd" d="M 16,8.0011832 A 8.0000001,8.0000001 0 0 1 -2.5e-8,8.0011832 8.0000001,8.0000001 0 1 1 16,8.0011832 z"/>
-  <path style="fill:#fff;fill-opacity:.9" d="m 8.15625,3.0033955 c -0.464552,-0.015003 -0.881354,0.249416 -1.0625,0.6875 -0.181146,0.438085 -0.083075,0.951186 0.25,1.28125 l 1.96875,2.03125 -6.3125,0 0,2 6.3125,0 -1.96875,2.0312495 c -0.438257,0.450086 -0.438257,1.174914 0,1.625 0.438256,0.450087 1.155494,0.450087 1.59375,0 L 12.65625,8.8158955 C 12.869535,8.5998545 13,8.3094545 13,8.0033955 c 0,-0.306059 -0.130465,-0.596459 -0.34375,-0.8125 L 8.9375,3.3471455 C 8.735903,3.1341045 8.448421,3.0123955 8.15625,3.0033955 z"/>
- </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="16"
+   height="16"
+   id="svg7384">
+  <title
+     id="title9167">Gnome Symbolic Icon Theme</title>
+  <defs
+     id="defs11" />
+  <metadata
+     id="metadata90">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Gnome Symbolic Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#4d4d4d; }</style>
+  <path
+     d="M 14,7.9991501 8,1 2,7.9991501 l 4,0 L 6,14 l 4,0 0,-6.0008499 z"
+     inkscape:connector-curvature="0"
+     id="path3288-51"
+     style="color:#bebebe;fill:currentColor;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
 </svg>
