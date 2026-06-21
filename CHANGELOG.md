@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026.06.21 — Inherits: breeze after Numix so Plasma tray icons resolve
+
+### What Changed
+
+On Plasma the system-tray **Networks** and **Power & Battery** icons were blank.
+Plasma uses Breeze's granular status names (`network-wired-activated`,
+`battery-000…100` with charging/symbolic/profile variants) that Surfn doesn't
+ship, so they fall through `Inherits=`. The chain reached breeze too late — a
+partial status set earlier in the list shadowed it — so the icons came up empty.
+Moved breeze up to just after the two Numix themes, and dropped Sardi.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `generate_index_theme()` now emits a curated
+  `Inherits=Numix,Numix-Circle,breeze,Paper,Papirus,Moka,gnome,hicolor` (was
+  pulled verbatim from Surfn, which buried breeze and included Sardi). Surfing's
+  own icons still win over every inherited theme; this only changes which theme
+  fills the gaps. `check-icons.sh` clean.
+
 ## 2026.06.21 — Stop flattening go-home (Thunar Home was turning dark)
 
 ### What Changed

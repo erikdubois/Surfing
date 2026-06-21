@@ -450,7 +450,12 @@ generate_index_theme() {
         echo "[Icon Theme]"
         echo "Name=Surfing"
         echo "Comment=Surfing icon theme (Breeze-style context-first layout)"
-        grep -E '^Inherits=' "${SRC}/index.theme" 2>/dev/null || echo "Inherits=breeze,hicolor"
+        # Numix and Numix-Circle stay first; breeze follows them so Plasma's
+        # complete status set (battery-000..100, network-wired-activated, …) —
+        # which Surfn doesn't ship — resolves to breeze instead of a partial set
+        # further down the chain that left the tray icons blank. Sardi dropped
+        # (not used). Surfing's own icons always win over any inherited theme.
+        echo "Inherits=Numix,Numix-Circle,breeze,Paper,Papirus,Moka,gnome,hicolor"
         echo "DisplayDepth=32"
         echo "Example=folder"
         echo "FollowsColorScheme=true"
