@@ -247,7 +247,7 @@ overlay_breeze_status_icons() {
         done
     done
     while IFS= read -r s; do
-        sed -i 's@color:#232629@color:#eff0f1@g' "${s}"
+        sed -i -e 's@color:#232629@color:#eff0f1@g' -e 's@color:#31363b@color:#eff0f1@g' "${s}"
     done < <(find "${OUT}"/status "${OUT}"/devices "${OUT}"/actions -type f \
                   \( -name 'battery*.svg' -o -name 'network*.svg' -o -name 'audio-volume*.svg' \) 2>/dev/null)
     log_success "Overlaid ${n} Breeze battery/network icons"
@@ -261,7 +261,9 @@ overlay_breeze_clipboard() {
     local src="${BREEZE}/status/24/klipper-symbolic.svg" tmp f n=0
     [[ -f "${src}" ]] || { log_warn "Breeze klipper-symbolic not found — skipping"; return; }
     tmp="$(mktemp)"
-    sed 's@color:#232629@color:#eff0f1@g' "${src}" > "${tmp}"
+    # Breeze's ColorScheme-Text default is #232629 (light flavour) or #31363b
+    # (dark flavour, as klipper uses) — map both to the light tone.
+    sed -e 's@color:#232629@color:#eff0f1@g' -e 's@color:#31363b@color:#eff0f1@g' "${src}" > "${tmp}"
     chmod 644 "${tmp}"
     while IFS= read -r f; do
         rm -f "${f}"               # klipper.svg is a Surfn symlink -> evolution-tasks (brown)

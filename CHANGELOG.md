@@ -14,7 +14,8 @@ other tray icons; `evolution-tasks` is left alone.
 - [rearrange.sh](./rearrange.sh) `overlay_breeze_clipboard()` (after
   `overlay_breeze_status_icons`): replaces each `klipper.svg` (a Surfn symlink →
   `evolution-tasks`) with Breeze's `klipper-symbolic`, recoloured
-  `#232629 → #eff0f1` so KDE tints it to the panel text colour. Only `klipper` is
+  `#232629`/`#31363b → #eff0f1` (Breeze's light and dark ColorScheme-Text
+  defaults) so it renders white like the other tray icons. Only `klipper` is
   touched. `check-icons.sh` clean.
 
 ## 2026.06.21 — White system-tray expander arrow (recolour Surfn arrows)
@@ -73,7 +74,7 @@ recolour).
   `network-wired-activated`, `battery-000…100` (charging/symbolic/profile),
   `audio-volume-high/-medium/-low/-muted` (± symbolic). `network-workgroup*` is
   skipped to keep Surfn's grey globe. Then rewrites the recolour stylesheet
-  default `color:#232629 → #eff0f1` on the real SVGs so they read on dark menus;
+  default `color:#232629`/`#31363b → #eff0f1` on the real SVGs so they read on dark menus;
   KDE still recolours to the panel text colour.
 - `check-icons.sh` clean; perms `0644` (via `normalize_permissions`).
 
