@@ -253,6 +253,24 @@ overlay_breeze_status_icons() {
     log_success "Overlaid ${n} Breeze battery/network icons"
 }
 
+# Replace Surfn's klipper icon (a brown clipboard) with Breeze's clipboard, in
+# the same light/recolorable monochrome as the other tray icons. Only the klipper
+# icon is touched.
+overlay_breeze_clipboard() {
+    log_section "Replacing Surfn klipper with Breeze clipboard (white)"
+    local src="${BREEZE}/status/24/klipper-symbolic.svg" tmp f n=0
+    [[ -f "${src}" ]] || { log_warn "Breeze klipper-symbolic not found — skipping"; return; }
+    tmp="$(mktemp)"
+    sed 's@color:#232629@color:#eff0f1@g' "${src}" > "${tmp}"
+    chmod 644 "${tmp}"
+    while IFS= read -r f; do
+        rm -f "${f}"               # klipper.svg is a Surfn symlink -> evolution-tasks (brown)
+        cp "${tmp}" "${f}"; n=$((n+1))
+    done < <(find "${OUT}" -name 'klipper.svg')
+    rm -f "${tmp}"
+    log_success "Replaced ${n} klipper icon(s) with Breeze clipboard"
+}
+
 # Recreate HiDPI @2x dirs as symlinks per context (source used uniform @2x).
 make_hidpi() {
     log_section "Creating per-context @2x HiDPI symlinks"
@@ -564,6 +582,7 @@ main() {
     fix_cross_aliases
     overlay_breeze_contexts
     overlay_breeze_status_icons
+    overlay_breeze_clipboard
     repair_osb_svgs
     flatten_nav_actions
     derive_vertical_arrows

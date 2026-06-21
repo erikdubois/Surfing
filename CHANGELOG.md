@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026.06.21 — Klipper: use Breeze's clipboard icon (white)
+
+### What Changed
+
+The tray clipboard (Klipper) showed Surfn's brown clipboard — Surfn's
+`klipper.svg` is a symlink to `evolution-tasks.svg`. Replaced just the klipper
+icon with Breeze's clipboard in the same white/recolorable monochrome as the
+other tray icons; `evolution-tasks` is left alone.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `overlay_breeze_clipboard()` (after
+  `overlay_breeze_status_icons`): replaces each `klipper.svg` (a Surfn symlink →
+  `evolution-tasks`) with Breeze's `klipper-symbolic`, recoloured
+  `#232629 → #eff0f1` so KDE tints it to the panel text colour. Only `klipper` is
+  touched. `check-icons.sh` clean.
+
 ## 2026.06.21 — White system-tray expander arrow (recolour Surfn arrows)
 
 ### What Changed
