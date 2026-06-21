@@ -45,10 +45,12 @@ Pointed `thunar` at the same blue icon so every Thunar name matches.
 ### Technical Details
 
 - [rearrange.sh](./rearrange.sh) `preferred_app_aliases()` (after
-  `preferred_place_aliases`): symlinks `apps/<size>/thunar.svg → nautilus.svg`
-  (which resolves to the blue `system-file-manager.svg`), matching the existing
-  `Thunar.svg → nautilus.svg` convention. `org.xfce.thunar.svg` (→ `thunar.svg`)
-  follows automatically. Chose a symlink over a copy to keep one source of truth.
+  `preferred_place_aliases`): symlinks `apps/<size>/{thunar,Thunar,org.xfce.Thunar}.svg
+  → nautilus.svg` (which resolves to the blue `system-file-manager.svg`), matching
+  the existing `Thunar.svg → nautilus.svg` convention. `org.xfce.thunar.svg`
+  (→ `thunar.svg`) follows automatically. Capital-T variants are aliased
+  explicitly since some launchers/.desktop files request that casing and Surfn
+  ships only lowercase. Symlink over copy to keep one source of truth.
 - `check-icons.sh` clean.
 
 ## 2026.06.21 — Ship Breeze battery + network + audio icons (light default)

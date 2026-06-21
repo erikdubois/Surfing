@@ -475,8 +475,12 @@ preferred_place_aliases() {
 # that Thunar.svg already links to, so every Thunar name renders blue. Done as a
 # symlink (matching the existing Thunar.svg -> nautilus.svg convention) across any
 # apps size dir that ships the target, so org.xfce.thunar (-> thunar) follows too.
+# Capital-T names (Thunar, org.xfce.Thunar) are aliased explicitly because some
+# launchers/.desktop files request that casing and Surfn only ships lowercase.
 APP_ICON_ALIASES=(
     "thunar=nautilus"
+    "Thunar=nautilus"
+    "org.xfce.Thunar=nautilus"
 )
 preferred_app_aliases() {
     log_section "Applying preferred app aliases"
