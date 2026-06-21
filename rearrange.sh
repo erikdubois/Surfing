@@ -258,7 +258,10 @@ repair_osb_svgs() {
 # currentColor + the .ColorScheme-Text stylesheet so KDE recolours it to the
 # toolbar text colour (light on dark, dark on light); GTK keeps using the
 # untouched symbolic icons. Scope: navigation only (back/forward/up/home/reload).
-NAV_FLAT_ICONS=(go-previous go-next go-up go-home view-refresh go-previous-rtl go-next-rtl)
+# go-up/go-down are derived from go-previous by rotation (see
+# derive_vertical_arrows) rather than flattened from their own symbolic art,
+# which is a heavier weight that looked too thick next to back/forward.
+NAV_FLAT_ICONS=(go-previous go-next go-home view-refresh go-previous-rtl go-next-rtl)
 flatten_nav_actions() {
     log_section "Flattening navigation action icons (KDE-recolorable)"
     local actdir="${OUT}/actions" name src tmp size n=0
@@ -281,6 +284,24 @@ flatten_nav_actions() {
         rm -f "${tmp}"
     done
     log_success "Flattened ${n} nav icon files"
+}
+
+# Derive go-up / go-down by rotating the flat go-previous arrow 90°, so the
+# vertical arrows share the exact weight and style of back/forward. (Surfn's own
+# symbolic go-up is a heavier design that looked too thick next to them.)
+derive_vertical_arrows() {
+    log_section "Deriving vertical nav arrows from go-previous"
+    local actdir="${OUT}/actions" size d n=0
+    for d in "${actdir}"/*/; do
+        size="$(basename "${d}")"
+        [[ "${size}" =~ ${SIZES_RE} || "${size}" == scalable ]] || continue
+        [[ -e "${d}go-previous.svg" ]] || continue
+        rm -f "${d}go-up.svg" "${d}go-up.png" "${d}go-down.svg" "${d}go-down.png"
+        sed 's@transform="translate@transform="rotate(90 8 8) translate@'  "${d}go-previous.svg" > "${d}go-up.svg"
+        sed 's@transform="translate@transform="rotate(-90 8 8) translate@' "${d}go-previous.svg" > "${d}go-down.svg"
+        n=$((n+2))
+    done
+    log_success "Derived ${n} vertical arrow files"
 }
 
 # Dolphin's hamburger menu button asks for application-menu; Surfn ships only a
@@ -443,6 +464,7 @@ main() {
     overlay_breeze_contexts
     repair_osb_svgs
     flatten_nav_actions
+    derive_vertical_arrows
     make_hamburger_menu
     propagate_place_aliases
     preferred_place_aliases

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026.06.21 — Match up/down arrow weight to back/forward
+
+### What Changed
+
+After flattening the nav icons, the up arrow looked too thick next to
+back/forward — Surfn's symbolic `go-up`/`go-down` are a heavier design than
+`go-previous`/`go-next`. Now the vertical arrows are derived by rotating the
+thin `go-previous` arrow, so the whole nav family shares one weight.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `derive_vertical_arrows()` (after
+  `flatten_nav_actions`): builds `go-up` (`rotate(90 8 8)`) and `go-down`
+  (`rotate(-90 8 8)`) from the flat `go-previous` across
+  `actions/{16,22,24,32,scalable}` (**10** files); `go-up` removed from
+  `NAV_FLAT_ICONS` so it's no longer flattened from its heavier symbolic art.
+- Rendered + recolor-checked; `check-icons.sh` clean.
+
 ## 2026.06.21 — Hamburger menu icon for Dolphin's open-menu button
 
 ### What Changed
