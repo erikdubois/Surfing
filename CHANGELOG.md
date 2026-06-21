@@ -14,12 +14,14 @@ the icon. Copied (`cp -a`) icons were fine because `-a` preserves upstream
 
 ### Technical Details
 
-- [rearrange.sh](./rearrange.sh): new `normalize_permissions()` (called from
-  `main()` after `generate_index_theme`) runs
-  `find "${OUT}" -type f -exec chmod 644 {} +` — a catch-all pass so any file,
-  however generated, ships world-readable. Chose the end-of-run sweep over
-  per-site `chmod` so future generation code paths can't reintroduce `0600`.
-- Also chmod'd the 45 already-affected files in place. `check-icons.sh` clean.
+- [rearrange.sh](./rearrange.sh): fixed at the write sites — `flatten_nav_actions`
+  and `make_hamburger_menu` now `chmod 644` the `mktemp` temp before `cp`, and
+  `derive_vertical_arrows` `chmod 644`s its redirect outputs (redirect mode is
+  umask-dependent). Each generated icon is `0644` the moment it's written.
+- `normalize_permissions()` (called from `main()` after `generate_index_theme`)
+  runs `find "${OUT}" -type f -exec chmod 644 {} +` as a catch-all backstop, so
+  any future generation path that forgets the per-site `chmod` still ships
+  world-readable. Verified: zero non-`0644` files; `check-icons.sh` clean.
 
 ## 2026.06.21 — Match up/down arrow weight to back/forward
 

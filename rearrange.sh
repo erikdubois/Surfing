@@ -275,6 +275,7 @@ flatten_nav_actions() {
             -e 's@fill:#[0-9a-fA-F]{3,6}@fill:currentColor@g' \
             -e 's@<path @<path class="ColorScheme-Text" @g' \
             "${src}" > "${tmp}"
+        chmod 644 "${tmp}"   # mktemp creates 0600; cp would propagate it
         for size in 16 22 24 32 scalable; do
             [[ -d "${actdir}/${size}" ]] || continue
             rm -f "${actdir}/${size}/${name}.svg" "${actdir}/${size}/${name}.png"
@@ -299,6 +300,7 @@ derive_vertical_arrows() {
         rm -f "${d}go-up.svg" "${d}go-up.png" "${d}go-down.svg" "${d}go-down.png"
         sed 's@transform="translate@transform="rotate(90 8 8) translate@'  "${d}go-previous.svg" > "${d}go-up.svg"
         sed 's@transform="translate@transform="rotate(-90 8 8) translate@' "${d}go-previous.svg" > "${d}go-down.svg"
+        chmod 644 "${d}go-up.svg" "${d}go-down.svg"   # redirect mode is umask-dependent
         n=$((n+2))
     done
     log_success "Derived ${n} vertical arrow files"
@@ -324,6 +326,7 @@ make_hamburger_menu() {
  </g>
 </svg>
 SVG
+    chmod 644 "${tmp}"   # mktemp creates 0600; cp would propagate it
     for name in "${HAMBURGER_MENU_ICONS[@]}"; do
         for d in "${actdir}"/*/; do
             size="$(basename "${d}")"
