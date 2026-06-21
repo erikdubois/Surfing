@@ -217,16 +217,17 @@ overlay_breeze_contexts() {
     log_success "Overlaid ${n} Breeze size dirs"
 }
 
-# Overlay Breeze's battery + network icons into Surfing as first-class icons.
-# Plasma's tray (Networks, Power & Battery) uses Breeze's granular names
-# (battery-000..100 ± charging/symbolic/profile, network-wired-activated,
-# network-wireless-*) that Surfn doesn't ship; relying on Inherits= proved
-# unreliable, so ship them outright. network-workgroup is skipped to keep Surfn's
-# grey globe. The recolour stylesheet default is switched from Breeze's dark
-# #232629 to a light tone so the icons read on dark panels/menus even where the
-# host app doesn't recolour them (KDE still recolours to the panel text colour).
+# Overlay Breeze's battery + network + audio-volume icons into Surfing as
+# first-class icons. Plasma's tray (Networks, Power & Battery, Volume) uses
+# Breeze's granular names (battery-000..100 ± charging/symbolic/profile,
+# network-wired-activated, network-wireless-*, audio-volume-high/-muted/…) that
+# Surfn doesn't ship cleanly; relying on Inherits= proved unreliable, so ship
+# them outright. network-workgroup is skipped to keep Surfn's grey globe. The
+# recolour stylesheet default is switched from Breeze's dark #232629 to a light
+# tone so the icons read on dark panels/menus even where the host app doesn't
+# recolour them (KDE still recolours to the panel text colour).
 overlay_breeze_status_icons() {
-    log_section "Overlaying Breeze battery + network icons (light default)"
+    log_section "Overlaying Breeze battery + network + audio icons (light default)"
     [[ -d "${BREEZE}" ]] || { log_warn "Breeze not found at ${BREEZE} — skipping"; return; }
     local ctx d size f base n=0 s
     for ctx in status devices actions; do
@@ -236,7 +237,7 @@ overlay_breeze_status_icons() {
             [[ "${size}" =~ ${SIZES_RE} ]] || continue
             [[ -L "${d%/}" ]] && continue
             mkdir -p "${OUT}/${ctx}/${size}"
-            for f in "${d}"battery* "${d}"network*; do
+            for f in "${d}"battery* "${d}"network* "${d}"audio-volume*; do
                 [[ -e "${f}" || -L "${f}" ]] || continue
                 base="$(basename "${f}")"
                 [[ "${base}" == network-workgroup* ]] && continue   # keep Surfn grey globe
@@ -248,7 +249,7 @@ overlay_breeze_status_icons() {
     while IFS= read -r s; do
         sed -i 's@color:#232629@color:#eff0f1@g' "${s}"
     done < <(find "${OUT}"/status "${OUT}"/devices "${OUT}"/actions -type f \
-                  \( -name 'battery*.svg' -o -name 'network*.svg' \) 2>/dev/null)
+                  \( -name 'battery*.svg' -o -name 'network*.svg' -o -name 'audio-volume*.svg' \) 2>/dev/null)
     log_success "Overlaid ${n} Breeze battery/network icons"
 }
 

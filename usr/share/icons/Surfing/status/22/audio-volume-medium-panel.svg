@@ -1,9 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
- <path d="m 11.992 7.5 -0.999 1 c 1.233 1.276 1.233 3.224 0 4.5 l 0.999 1 c 1.952 -2.02 1.952 -4.479 0 -6.5 z" style="fill:#ececec;fill-opacity:1;"/>
- <path d="m 13.491 7 c 2.025 2.027 2.025 5.973 0 8 l 1.499 1.5 c 2.902 -2.905 2.902 -8.095 0 -11 z" style="fill:#ececec;opacity:1;fill-opacity:1;"/>
- <path d="m 15.988 5 c 3.561 3.372 3.508 8.628 0 12 l 1.499 1.5 c 4.658 -4.5 4.71 -10.5 0 -15 z" style="fill:#ececec;opacity:0.4;fill-opacity:1;"/>
- <g style="fill:#ececec;fill-opacity:1">
-  <path d="m 8 5 -3 3 0 6 l 3 3 0 -4 2 -2 -2 -2 z"/>
-  <path d="m 2 8 c -0.523 0 -0.999 0.498 -0.999 1 l 0 4 c 0 0.58 0.433 1 0.999 1 l 3.996 0 0 -6 z"/>
- </g>
+<svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+    <style id="current-color-scheme" type="text/css">
+        .ColorScheme-Text {
+            color:#eff0f1;
+        }
+    </style>
+    <g class="ColorScheme-Text" fill="currentColor">
+        <path d="m14.324219 7.28125-.539063.8613281a4 4 0 0 1 1.214844 2.8574219 4 4 0 0 1 -1.210938 2.861328l.539063.863281a5 5 0 0 0 1.671875-3.724609 5 5 0 0 0 -1.675781-3.71875z"/>
+        <path d="m13.865234 3.5371094-.24414.9765625a7 7 0 0 1 4.378906 6.4863281 7 7 0 0 1 -4.380859 6.478516l.24414.974609a8 8 0 0 0 5.136719-7.453125 8 8 0 0 0 -5.134766-7.4628906z" fill-opacity=".35"/>
+        <path d="m3.0000005 8h2v6h-2z" fill-rule="evenodd"/>
+        <path d="m6.0000005 14 5.0000005 5h.999999v-16h-1l-4.9999995 5z"/>
+    </g>
 </svg>
