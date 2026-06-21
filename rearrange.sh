@@ -402,6 +402,16 @@ prune_dangling() {
     log_success "Pruned ${n} dead symlinks"
 }
 
+# Normalise file permissions in OUT. Generated icons (recoloured nav art,
+# hamburger menus) are written via `cp` from mktemp temp files, which mktemp
+# creates 0600 — so those files ship owner-only and trip "not world-readable"
+# checks. Force every regular file to 0644 so the theme is installable as-is.
+normalize_permissions() {
+    log_section "Normalising file permissions"
+    find "${OUT}" -type f -exec chmod 644 {} +
+    log_success "Set all theme files to 0644"
+}
+
 # Regenerate index.theme from what is actually on disk in OUT.
 generate_index_theme() {
     log_section "Generating index.theme"
@@ -471,6 +481,7 @@ main() {
     make_hidpi
     prune_dangling
     generate_index_theme
+    normalize_permissions
     log_success "$(basename "$0") done"
 }
 

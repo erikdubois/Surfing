@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026.06.21 — Generated icons no longer ship owner-only (0600 → 0644)
+
+### What Changed
+
+`check-icons.sh` flagged 45 nav/menu icons as "not world-readable" — they were
+mode `0600`, so the installed theme would be unreadable for other users. Root
+cause: every flagged file is one the script *generates* (recoloured nav art,
+vertical arrows, hamburger menu), written via `cp` from a `mktemp` temp file —
+and `mktemp` creates its temp file `0600`, which `cp` (no `-p`) propagated to
+the icon. Copied (`cp -a`) icons were fine because `-a` preserves upstream
+`0644`.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh): new `normalize_permissions()` (called from
+  `main()` after `generate_index_theme`) runs
+  `find "${OUT}" -type f -exec chmod 644 {} +` — a catch-all pass so any file,
+  however generated, ships world-readable. Chose the end-of-run sweep over
+  per-site `chmod` so future generation code paths can't reintroduce `0600`.
+- Also chmod'd the 45 already-affected files in place. `check-icons.sh` clean.
+
 ## 2026.06.21 — Match up/down arrow weight to back/forward
 
 ### What Changed
