@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026.06.21 — Stop flattening go-home (Thunar Home was turning dark)
+
+### What Changed
+
+Thunar's "Home" shortcut icon went from white to dark after the nav-flatten
+work. Surfn's `go-home` is already a clean white (`#ffffff`) house that GTK shows
+correctly on a dark sidebar; flattening it pinned the fill to
+`currentColor`/`#4d4d4d`, forcing it dark. Removed `go-home` from the flatten
+set so the white original is kept.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh): `go-home` dropped from `NAV_FLAT_ICONS`
+  (`flatten_nav_actions`). Back/forward/up/down/reload stay flat + recolorable;
+  `go-home` keeps Surfn's white house. `check-icons.sh` clean; perms `0644`.
+
 ## 2026.06.21 — Generated icons no longer ship owner-only (0600 → 0644)
 
 ### What Changed

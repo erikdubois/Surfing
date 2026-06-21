@@ -261,7 +261,10 @@ repair_osb_svgs() {
 # go-up/go-down are derived from go-previous by rotation (see
 # derive_vertical_arrows) rather than flattened from their own symbolic art,
 # which is a heavier weight that looked too thick next to back/forward.
-NAV_FLAT_ICONS=(go-previous go-next go-home view-refresh go-previous-rtl go-next-rtl)
+# go-home is intentionally NOT flattened: Surfn's go-home is already a clean
+# white (#ffffff) house that GTK shows correctly (e.g. Thunar's Home shortcut);
+# pinning it to currentColor/#4d4d4d turned it dark on dark sidebars.
+NAV_FLAT_ICONS=(go-previous go-next view-refresh go-previous-rtl go-next-rtl)
 flatten_nav_actions() {
     log_section "Flattening navigation action icons (KDE-recolorable)"
     local actdir="${OUT}/actions" name src tmp size n=0
