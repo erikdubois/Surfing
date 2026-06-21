@@ -231,6 +231,32 @@ make_hidpi() {
     log_success "Created ${n} @2x symlinks"
 }
 
+# Propagate same-directory alias symlinks from places/scalable down to every
+# fixed pixel size. Surfn ships alternate folder names (e.g. folder-downloads ->
+# folder-download, folder-text -> folder-documents) only in scalable/, so when a
+# desktop requests one at a fixed size it misses and falls through Inherits= to a
+# foreign theme (Numix/Breeze) — rendering a mismatched folder. Recreating each
+# alias at the sizes where its target exists keeps every folder the Surfn style.
+propagate_place_aliases() {
+    log_section "Propagating places aliases to fixed sizes"
+    local ctxdir="${OUT}/places" link base target sizedir size n=0
+    [[ -d "${ctxdir}/scalable" ]] || { log_warn "no places/scalable"; return; }
+    while IFS= read -r link; do
+        target="$(readlink "${link}")"
+        [[ "${target}" == */* ]] && continue          # same-dir aliases only
+        base="$(basename "${link}")"
+        for sizedir in "${ctxdir}"/*/; do
+            size="$(basename "${sizedir}")"
+            [[ "${size}" =~ ${SIZES_RE} ]] || continue # fixed sizes only
+            [[ -e "${sizedir}${base}" ]] && continue   # don't clobber a real icon
+            [[ -e "${sizedir}${target}" ]] || continue # target must exist here
+            ln -sfn "${target}" "${sizedir}${base}"
+            n=$((n+1))
+        done
+    done < <(find "${ctxdir}/scalable" -maxdepth 1 -type l)
+    log_success "Propagated ${n} place aliases to fixed sizes"
+}
+
 # Remove any dead symlinks left in the tree (e.g. Breeze cross-context aliases
 # whose targets live in contexts Surfing doesn't provide). The alias names fall
 # back through Inherits= at runtime, so dropping the dead link loses nothing and
@@ -304,6 +330,7 @@ main() {
     copy_leaf_dirs
     fix_cross_aliases
     overlay_breeze_contexts
+    propagate_place_aliases
     make_hidpi
     prune_dangling
     generate_index_theme

@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026.06.21 — Fix folder-name aliases falling back to foreign themes
+
+### What Changed
+
+On Plasma, the **Downloads** folder rendered in a foreign style (different
+colour) instead of the Surfn blue. Cause: Surfn ships alternate folder names
+(`folder-downloads`, `folder-text`, `folder-image(s)`, `folder-sound(s)`, …)
+only under `scalable/`, so when a desktop requested one at a **fixed pixel size**
+it missed and fell through `Inherits=` (Numix first) to a foreign theme. Fixed by
+propagating those aliases down to every fixed size in the generator.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh): new `propagate_place_aliases()` step (runs
+  after `overlay_breeze_contexts`). For each same-directory alias symlink in
+  `places/scalable`, it recreates the alias at every fixed size where the target
+  icon exists — so e.g. `folder-downloads.png → folder-download.png` now lives at
+  16–128, not just `scalable/`.
+- Regenerated: **416** place aliases propagated to fixed sizes; `index.theme`
+  unchanged (102 groups — aliases land in already-declared directories).
+- `check-icons.sh` clean: no broken symlinks, `gtk-update-icon-cache` builds.
+
+### Files Modified
+
+- `rearrange.sh` (new `propagate_place_aliases` step)
+- `usr/share/icons/Surfing/places/**` (regenerated — fixed-size folder aliases)
+
 ## 2026.06.21 — Initial Surfing theme + repo
 
 ### What Changed

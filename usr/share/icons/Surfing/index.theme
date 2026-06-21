@@ -1,7 +1,7 @@
 [Icon Theme]
 Name=Surfing
 Comment=Surfing icon theme (Breeze-style context-first layout)
-Inherits=Numix,Numix-Circle,Sardi,Paper,Papirus,breeze,Moka,gnome,hicolor
+Inherits=Numix,Numix-Circle,Sardi,breeze,Paper,Papirus,Moka,gnome,hicolor
 DisplayDepth=32
 Example=folder
 FollowsColorScheme=true
