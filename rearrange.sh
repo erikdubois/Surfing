@@ -283,6 +283,39 @@ flatten_nav_actions() {
     log_success "Flattened ${n} nav icon files"
 }
 
+# Dolphin's hamburger menu button asks for application-menu; Surfn ships only a
+# gear (open-menu and the *-symbolic variants) and no colored application-menu,
+# so in KDE the button renders blank. Ship a clean flat, KDE-recolorable
+# hamburger (three bars) as application-menu and open-menu so the menu button
+# keeps the expected ≡ look and adapts to a dark or light toolbar.
+HAMBURGER_MENU_ICONS=(application-menu open-menu)
+make_hamburger_menu() {
+    log_section "Writing hamburger menu icons"
+    local actdir="${OUT}/actions" name size d n=0 tmp
+    tmp="$(mktemp)"
+    cat > "${tmp}" <<'SVG'
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+ <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#4d4d4d; }</style>
+ <g class="ColorScheme-Text" fill="currentColor">
+  <rect x="2" y="3" width="12" height="2" rx="1"/>
+  <rect x="2" y="7" width="12" height="2" rx="1"/>
+  <rect x="2" y="11" width="12" height="2" rx="1"/>
+ </g>
+</svg>
+SVG
+    for name in "${HAMBURGER_MENU_ICONS[@]}"; do
+        for d in "${actdir}"/*/; do
+            size="$(basename "${d}")"
+            [[ "${size}" =~ ${SIZES_RE} || "${size}" == scalable ]] || continue
+            rm -f "${d}${name}.svg" "${d}${name}.png"
+            cp "${tmp}" "${d}${name}.svg"
+            n=$((n+1))
+        done
+    done
+    rm -f "${tmp}"
+    log_success "Wrote ${n} hamburger menu icon files"
+}
+
 # Propagate same-directory alias symlinks from places/scalable down to every
 # fixed pixel size. Surfn ships alternate folder names (e.g. folder-downloads ->
 # folder-download, folder-text -> folder-documents) only in scalable/, so when a
@@ -410,6 +443,7 @@ main() {
     overlay_breeze_contexts
     repair_osb_svgs
     flatten_nav_actions
+    make_hamburger_menu
     propagate_place_aliases
     preferred_place_aliases
     make_hidpi

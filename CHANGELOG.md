@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026.06.21 — Hamburger menu icon for Dolphin's open-menu button
+
+### What Changed
+
+Dolphin's hamburger (⋮/≡) menu button rendered blank: it requests
+`application-menu`, but Surfn ships only a *gear* (`open-menu` and the
+`*-symbolic` variants) with no colored `application-menu`, so KDE fell back to
+nothing usable. Shipped a proper flat ≡ hamburger so the button keeps its
+expected look.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `make_hamburger_menu()` (after
+  `flatten_nav_actions`): writes a clean three-bar ≡ SVG (fill `currentColor` +
+  `.ColorScheme-Text` stylesheet, so KDE recolours it light-on-dark /
+  dark-on-light) as `application-menu` **and** `open-menu` across
+  `actions/{16,22,24,32,scalable}` (**10** files), replacing the Surfn gear.
+- Rendered + recolor-checked with `rsvg-convert`; `check-icons.sh` clean.
+
 ## 2026.06.21 — Flat navigation icons in Dolphin (match Thunar)
 
 ### What Changed
