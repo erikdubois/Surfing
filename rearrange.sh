@@ -217,6 +217,41 @@ overlay_breeze_contexts() {
     log_success "Overlaid ${n} Breeze size dirs"
 }
 
+# Overlay Breeze's battery + network icons into Surfing as first-class icons.
+# Plasma's tray (Networks, Power & Battery) uses Breeze's granular names
+# (battery-000..100 ± charging/symbolic/profile, network-wired-activated,
+# network-wireless-*) that Surfn doesn't ship; relying on Inherits= proved
+# unreliable, so ship them outright. network-workgroup is skipped to keep Surfn's
+# grey globe. The recolour stylesheet default is switched from Breeze's dark
+# #232629 to a light tone so the icons read on dark panels/menus even where the
+# host app doesn't recolour them (KDE still recolours to the panel text colour).
+overlay_breeze_status_icons() {
+    log_section "Overlaying Breeze battery + network icons (light default)"
+    [[ -d "${BREEZE}" ]] || { log_warn "Breeze not found at ${BREEZE} — skipping"; return; }
+    local ctx d size f base n=0 s
+    for ctx in status devices actions; do
+        [[ -d "${BREEZE}/${ctx}" ]] || continue
+        for d in "${BREEZE}/${ctx}"/*/; do
+            size="$(basename "${d}")"
+            [[ "${size}" =~ ${SIZES_RE} ]] || continue
+            [[ -L "${d%/}" ]] && continue
+            mkdir -p "${OUT}/${ctx}/${size}"
+            for f in "${d}"battery* "${d}"network*; do
+                [[ -e "${f}" || -L "${f}" ]] || continue
+                base="$(basename "${f}")"
+                [[ "${base}" == network-workgroup* ]] && continue   # keep Surfn grey globe
+                cp -a "${f}" "${OUT}/${ctx}/${size}/${base}"
+                n=$((n+1))
+            done
+        done
+    done
+    while IFS= read -r s; do
+        sed -i 's@color:#232629@color:#eff0f1@g' "${s}"
+    done < <(find "${OUT}"/status "${OUT}"/devices "${OUT}"/actions -type f \
+                  \( -name 'battery*.svg' -o -name 'network*.svg' \) 2>/dev/null)
+    log_success "Overlaid ${n} Breeze battery/network icons"
+}
+
 # Recreate HiDPI @2x dirs as symlinks per context (source used uniform @2x).
 make_hidpi() {
     log_section "Creating per-context @2x HiDPI symlinks"
@@ -483,6 +518,7 @@ main() {
     copy_leaf_dirs
     fix_cross_aliases
     overlay_breeze_contexts
+    overlay_breeze_status_icons
     repair_osb_svgs
     flatten_nav_actions
     derive_vertical_arrows

@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026.06.21 — Ship Breeze battery + network icons (light default)
+
+### What Changed
+
+Relying on `Inherits=` to supply Plasma's tray Networks/Battery icons proved
+unreliable, so they're now shipped as Surfing's own icons. Copied Breeze's
+`battery*` and `network*` icons into Surfing and switched their recolour default
+to a light tone (Erik runs dark panels/menus, where Breeze's dark `#232629`
+default would be near-invisible in any context that doesn't recolour).
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `overlay_breeze_status_icons()` (after
+  `overlay_breeze_contexts`): copies Breeze `battery*` + `network*` from the
+  `status`/`devices`/`actions` contexts (`cp -a`, preserving the many alias
+  symlinks) — **1209** icons incl. `network-wired-activated`,
+  `battery-000…100` with charging/symbolic/profile variants. `network-workgroup*`
+  is skipped to keep Surfn's grey globe. Then rewrites the recolour stylesheet
+  default `color:#232629 → #eff0f1` on the real SVGs so they read on dark menus;
+  KDE still recolours to the panel text colour.
+- `check-icons.sh` clean; perms `0644` (via `normalize_permissions`).
+
 ## 2026.06.21 — Inherits: breeze after Numix so Plasma tray icons resolve
 
 ### What Changed
