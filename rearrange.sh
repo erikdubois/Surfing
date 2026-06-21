@@ -231,6 +231,25 @@ make_hidpi() {
     log_success "Created ${n} @2x symlinks"
 }
 
+# Repair SVGs that reference the Inkscape Open Swatch Book (osb:) namespace
+# without declaring it. Surfn ships ~29 symbolic icons (go-previous, go-next,
+# pan-*, zoom-*, media-*, open-menu, …) carrying a dead <linearGradient
+# osb:paint="solid"> swatch leftover but no xmlns:osb — librsvg (used by GTK)
+# aborts parsing the whole file, so the icon renders as a missing-icon "?" in
+# GTK apps (e.g. Thunar's back/forward buttons). Injecting the namespace
+# declaration makes the foreign attribute valid and the file parses again.
+repair_osb_svgs() {
+    log_section "Repairing SVGs with undeclared osb: namespace"
+    local f n=0
+    while IFS= read -r f; do
+        grep -q 'xmlns:osb' "${f}" && continue
+        grep -q 'osb:' "${f}" || continue
+        sed -i 's#<svg #<svg xmlns:osb="http://www.openswatchbook.org/uri/2009/osb" #' "${f}"
+        n=$((n+1))
+    done < <(find "${OUT}" -name '*.svg' ! -type l)
+    log_success "Repaired ${n} SVGs"
+}
+
 # Propagate same-directory alias symlinks from places/scalable down to every
 # fixed pixel size. Surfn ships alternate folder names (e.g. folder-downloads ->
 # folder-download, folder-text -> folder-documents) only in scalable/, so when a
@@ -330,6 +349,7 @@ main() {
     copy_leaf_dirs
     fix_cross_aliases
     overlay_breeze_contexts
+    repair_osb_svgs
     propagate_place_aliases
     make_hidpi
     prune_dangling
