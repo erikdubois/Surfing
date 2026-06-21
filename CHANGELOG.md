@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026.06.21 — Flat navigation icons in Dolphin (match Thunar)
+
+### What Changed
+
+Plasma/Dolphin's toolbar showed the colored blue-circle navigation icons while
+XFCE/Thunar showed flat monochrome arrows — same theme, but the apps pull
+different files (GTK uses `actions/symbolic/<n>-symbolic`, KDE the colored
+`actions/<size>/<n>`). Made Dolphin match Thunar's flat arrows for the
+navigation set (back/forward/up/home/reload), auto-recolored to the toolbar
+text colour.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `flatten_nav_actions()` (after `repair_osb_svgs`):
+  builds each colored nav action icon from the symbolic artwork, converting the
+  fill to `currentColor` + a `.ColorScheme-Text` stylesheet so KDE recolours it
+  (light on dark, dark on light). Writes to `actions/{16,22,24,32,scalable}`,
+  replacing the blue-circle versions. GTK keeps using the untouched symbolic
+  icons. Set: `go-previous/next/up/home`, `view-refresh`, `go-previous/next-rtl`
+  (**35** files).
+- Verified with `rsvg-convert`: flat render in default grey and (simulated)
+  light recolor; `check-icons.sh` clean.
+
 ## 2026.06.21 — Fix Plasma/GTK rendering: folder aliases + broken symbolic SVGs
 
 ### What Changed
