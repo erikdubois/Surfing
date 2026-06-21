@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.933 16.933" xmlns="http://www.w3.org/2000/svg">
+ <rect x="1.323" y="1.32" width="14.287" height="14.287" ry="7.144" fill="#a2a1ff" style="paint-order:stroke markers fill"/>
+ <rect x="2.877" y="9.4911" width="11.736" height="1.5443" ry=".30933" fill="#ffffff" opacity=".35" style="paint-order:markers stroke fill;stroke-width:1.1673"/>
+ <g transform="matrix(1.1673 0 0 1.1673 -1.1384 -330.39)" fill="#eeedff">
+  <rect x="4.498" y="290.38" width="1.323" height="1.323" ry=".132" style="paint-order:stroke markers fill"/>
+  <rect x="6.703" y="290.38" width="1.323" height="1.323" ry=".132" style="paint-order:stroke markers fill"/>
+  <rect x="8.908" y="290.38" width="1.323" height="1.323" ry=".132" style="paint-order:stroke markers fill"/>
+  <rect x="11.113" y="290.38" width="1.323" height="1.323" ry=".132" style="paint-order:stroke markers fill"/>
+ </g>
+</svg>

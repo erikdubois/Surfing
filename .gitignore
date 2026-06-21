@@ -1,0 +1,9 @@
+# Build scaffolding — read-only source snapshot used by rearrange.sh
+_src/
+
+# Generated icon cache (the install hook rebuilds it on the user's machine)
+icon-theme.cache
+usr/share/icons/*/icon-theme.cache
+
+.claude/
+.codex/
