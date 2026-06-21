@@ -16,8 +16,14 @@ Two rendering bugs surfaced after installing on real desktops:
    `media-*`, `open-menu`, …) carry a dead `<linearGradient osb:paint="solid">`
    Inkscape swatch but never declare the `osb:` namespace — so librsvg (used by
    GTK) aborts parsing the **whole file** and the icon disappears.
+3. **Plasma sidebar — Network was a plain folder, Recent Files a foreign icon**.
+   Dolphin's "Network" uses `folder-network` (Surfn maps it to a plain folder);
+   pointed it at the `network-workgroup` globe instead — the same icon XFCE's
+   "Browse Network" shows. "Recent Files" uses `document-open-recent` (Surfn
+   ships it only as a scalable SVG → fell back at fixed sizes); aliased to
+   `folder-recent`, matching "Recent Locations".
 
-Both fixed in the generator so regeneration stays reproducible.
+All fixed in the generator so regeneration stays reproducible.
 
 ### Technical Details
 
@@ -31,6 +37,10 @@ Both fixed in the generator so regeneration stays reproducible.
   `xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"` into every SVG that
   uses `osb:` without declaring it. **29** SVGs repaired; afterwards all 190
   symbolic action icons parse (`rsvg-convert` clean, 0 failures).
+- [rearrange.sh](./rearrange.sh) `preferred_place_aliases()` (after
+  `propagate_place_aliases`): forces specific names to the expected Surfn icon,
+  overriding the generic propagation — `folder-network → network-workgroup`
+  (globe), `document-open-recent → folder-recent`. **18** aliases applied.
 - `index.theme` group count unchanged (aliases/repairs land in already-declared
   directories). `check-icons.sh` clean; `gtk-update-icon-cache` builds.
 

@@ -276,6 +276,32 @@ propagate_place_aliases() {
     log_success "Propagated ${n} place aliases to fixed sizes"
 }
 
+# Force specific place names to the Surfn icon the desktop expects, overriding
+# the generic propagation above. Surfn maps folder-network to a plain folder, but
+# Dolphin's "Network" entry and XFCE's "Browse Network" should both show the
+# network-workgroup globe. Recent Files (document-open-recent) ships only as a
+# scalable SVG, so at a fixed size it falls back to a foreign theme — alias it to
+# folder-recent (what "Recent Locations" already uses) for a consistent look.
+PREFERRED_PLACE_ALIASES=(
+    "folder-network=network-workgroup"
+    "document-open-recent=folder-recent"
+)
+preferred_place_aliases() {
+    log_section "Applying preferred place aliases"
+    local ctxdir="${OUT}/places" pair name target sizedir size n=0
+    for pair in "${PREFERRED_PLACE_ALIASES[@]}"; do
+        name="${pair%%=*}"; target="${pair#*=}"
+        for sizedir in "${ctxdir}"/*/; do
+            size="$(basename "${sizedir}")"
+            [[ "${size}" =~ ${SIZES_RE} || "${size}" == scalable ]] || continue
+            [[ -e "${sizedir}${target}.png" ]] || continue
+            ln -sfn "${target}.png" "${sizedir}${name}.png"
+            n=$((n+1))
+        done
+    done
+    log_success "Applied ${n} preferred aliases"
+}
+
 # Remove any dead symlinks left in the tree (e.g. Breeze cross-context aliases
 # whose targets live in contexts Surfing doesn't provide). The alias names fall
 # back through Inherits= at runtime, so dropping the dead link loses nothing and
@@ -351,6 +377,7 @@ main() {
     overlay_breeze_contexts
     repair_osb_svgs
     propagate_place_aliases
+    preferred_place_aliases
     make_hidpi
     prune_dangling
     generate_index_theme
