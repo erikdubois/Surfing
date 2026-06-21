@@ -431,6 +431,29 @@ preferred_place_aliases() {
     log_success "Applied ${n} preferred aliases"
 }
 
+# Point specific app icons at the Surfn icon we want. Surfn's thunar icon is a
+# purple/yellow folder; align it with the blue file-manager folder (nautilus.svg)
+# that Thunar.svg already links to, so every Thunar name renders blue. Done as a
+# symlink (matching the existing Thunar.svg -> nautilus.svg convention) across any
+# apps size dir that ships the target, so org.xfce.thunar (-> thunar) follows too.
+APP_ICON_ALIASES=(
+    "thunar=nautilus"
+)
+preferred_app_aliases() {
+    log_section "Applying preferred app aliases"
+    local appdir pair name target d n=0
+    for pair in "${APP_ICON_ALIASES[@]}"; do
+        name="${pair%%=*}"; target="${pair#*=}"
+        for d in "${OUT}/apps"/*/; do
+            [[ -e "${d}${target}.svg" ]] || continue
+            rm -f "${d}${name}.svg" "${d}${name}.png"
+            ln -sfn "${target}.svg" "${d}${name}.svg"
+            n=$((n+1))
+        done
+    done
+    log_success "Applied ${n} app aliases"
+}
+
 # Remove any dead symlinks left in the tree (e.g. Breeze cross-context aliases
 # whose targets live in contexts Surfing doesn't provide). The alias names fall
 # back through Inherits= at runtime, so dropping the dead link loses nothing and
@@ -526,6 +549,7 @@ main() {
     make_hamburger_menu
     propagate_place_aliases
     preferred_place_aliases
+    preferred_app_aliases
     make_hidpi
     prune_dangling
     generate_index_theme

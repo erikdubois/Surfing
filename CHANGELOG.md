@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026.06.21 — Thunar icon: use the blue file-manager folder
+
+### What Changed
+
+Surfn's `thunar` icon was a purple/yellow folder, out of step with the blue
+file-manager folder `Thunar.svg` already used (it links to `nautilus.svg`).
+Pointed `thunar` at the same blue icon so every Thunar name matches.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `preferred_app_aliases()` (after
+  `preferred_place_aliases`): symlinks `apps/<size>/thunar.svg → nautilus.svg`
+  (which resolves to the blue `system-file-manager.svg`), matching the existing
+  `Thunar.svg → nautilus.svg` convention. `org.xfce.thunar.svg` (→ `thunar.svg`)
+  follows automatically. Chose a symlink over a copy to keep one source of truth.
+- `check-icons.sh` clean.
+
 ## 2026.06.21 — Ship Breeze battery + network + audio icons (light default)
 
 ### What Changed
