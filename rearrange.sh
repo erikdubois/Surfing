@@ -379,6 +379,27 @@ SVG
     log_success "Wrote ${n} hamburger menu icon files"
 }
 
+# Recolour Surfn's arrow-* icons (olive #859900 fill) to a white, KDE-recolorable
+# monochrome. Plasma's system-tray expander uses arrow-down/arrow-up; Breeze has
+# no arrow-* (only go-down/pan-down), so we recolour Surfn's own shape rather than
+# swap it. currentColor + .ColorScheme-Text (light default) lets the panel tint
+# it to the tray text colour, matching the volume/brightness icons.
+flatten_arrow_icons() {
+    log_section "Recoloring arrow icons (white, recolorable)"
+    local f n=0
+    while IFS= read -r f; do
+        grep -q 'fill:#859900\|fill="#859900"' "${f}" || continue
+        sed -i -E \
+            -e '0,/<path/{s@(<path)@<style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#eff0f1; }</style>\n  \1@}' \
+            -e 's@<path @<path class="ColorScheme-Text" @g' \
+            -e 's@fill:#859900@fill:currentColor@g' \
+            -e 's@fill="#859900"@fill="currentColor"@g' \
+            "${f}"
+        n=$((n+1))
+    done < <(find "${OUT}/actions" -name 'arrow-*.svg' ! -type l)
+    log_success "Recolored ${n} arrow icons"
+}
+
 # Propagate same-directory alias symlinks from places/scalable down to every
 # fixed pixel size. Surfn ships alternate folder names (e.g. folder-downloads ->
 # folder-download, folder-text -> folder-documents) only in scalable/, so when a
@@ -547,6 +568,7 @@ main() {
     flatten_nav_actions
     derive_vertical_arrows
     make_hamburger_menu
+    flatten_arrow_icons
     propagate_place_aliases
     preferred_place_aliases
     preferred_app_aliases

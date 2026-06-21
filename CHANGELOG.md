@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026.06.21 — White system-tray expander arrow (recolour Surfn arrows)
+
+### What Changed
+
+Plasma's system-tray expander (the ▼) showed Surfn's olive arrow. Breeze ships
+no `arrow-*` icons (only `go-down`/`pan-down`), so rather than swap the shape,
+recoloured Surfn's whole `arrow-*` family to a white, recolorable monochrome so
+it tints with the panel like the volume/brightness icons.
+
+### Technical Details
+
+- [rearrange.sh](./rearrange.sh) `flatten_arrow_icons()` (after
+  `make_hamburger_menu`): rewrites Surfn's `actions/**/arrow-*.svg` olive fill
+  (`#859900`) to `currentColor` + a `.ColorScheme-Text` light default
+  (`#eff0f1`), tagging the paths so KDE recolours them — **32** icons
+  (`arrow-up/down/left/right` and `-double`). `check-icons.sh` clean.
+
 ## 2026.06.21 — Thunar icon: use the blue file-manager folder
 
 ### What Changed
